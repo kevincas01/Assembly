@@ -1,0 +1,31 @@
+#!/bin/bash
+
+#---------------------------------------------------------------------
+# testmywc
+# Author: Dondero
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+# testmywc is a testing script for the mywc.s program.
+# To run it, type "testmywc".
+
+# To use it, the working directory must contain:
+# (1) mywcc, an executable binary file built from mywc.c, and
+# (2) mywcs, an executable binary file built from mywc.s
+
+# The script executes mywcc and mywcs on each file in the working
+# directory whose name is of the form "mywc*.txt", and compares the
+# results.
+#---------------------------------------------------------------------
+
+# Validate the argument.
+if [ "$#" -gt "0" ]; then
+   echo "Usage: testmywc"
+   exit 1
+fi
+
+for file in mywc*.txt
+do
+   ./testmywcdiff $file
+done
+

@@ -1,0 +1,77 @@
+#!/bin/bash
+
+#---------------------------------------------------------------------
+# testmywcdiff
+# Author: Bob Dondero
+#---------------------------------------------------------------------
+
+#---------------------------------------------------------------------
+# testmywcdiff is a testing script for the mywc program.
+# To run it, type "testmywcdiff", followed by the name of
+# an input file.
+#
+# To use it, the working directory must contain:
+# (1) mywcc, an executable binary file built from mywc.c, and
+# (2) mywcs, an executable binary file built from mywc.s
+#
+# The script runs the mywcs program and the mywcc program on the
+# specified file, and makes sure that the two programs have the
+# same exit status and write the same characters to stdout.
+#---------------------------------------------------------------------
+
+# Validate the argument.
+if [ "$#" != "1" ]; then
+   echo "Usage: testmywcdiff file"
+   exit 1
+fi
+
+if [ ! -e "$1" ]; then
+   echo "File $1 does not exist."
+   exit 1
+fi
+
+# Capture the argument.
+file=$1
+
+echo "==============================================================="
+echo "Test with input file" $file
+echo "==============================================================="
+
+# Run mywcc on the input file, and capture its exit status.
+./mywcc < $file > __stdout1
+ret1=$?
+
+# Run mywcs on the input file, and capture its exit status.
+./mywcs < $file > __stdout2
+ret2=$?
+
+# Check the exit status.
+if [ $ret1 != $ret2 ]; then
+   echo
+   echo "***** Exit status is incorrect."
+   echo
+   echo "********** This is the correct exit status:"
+   echo $ret1
+   echo
+   echo "********** Your program had this exit status:"
+   echo $ret2
+   echo
+fi
+
+# Check the stdout streams.
+diff -c __stdout1 __stdout2 > __diffout
+if [ $? != "0" ]; then
+   echo
+   echo "***** stdout is incorrect."
+   echo
+   echo "********** This is the correct stdout:"
+   cat __stdout1
+   echo
+   echo "********** This is your program's stdout:"
+   cat __stdout2
+   echo
+fi
+
+# Clean up.
+echo
+rm __stdout1 __stdout2 __diffout
