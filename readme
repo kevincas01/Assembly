@@ -1,4 +1,4 @@
-Assignment 4 readme File
+Assignment 5 readme File
 
 ------------------------------------------------------------------------
 Student 1: What is your name?
@@ -85,7 +85,7 @@ What is your mywc program test plan?
 
 ------------------------------------------------------------------------
 What are the CPU times consumed by the programs from Parts 2a, 2b, 2d,
-2e, and 2f to compute fib(250000)? Fill in the blanks.
+2e, and 2f to compute fib(250000) on armlab? Fill in the blanks.
 
 Part 2a:  _____ seconds
 
