@@ -29,10 +29,10 @@ lLineCount:
 lWordCount:
         .quad 0
 
-lCharCount
+lCharCount:
         .quad 0
 
-iInWord
+iInWord:
         .word FALSE
 
 
@@ -40,7 +40,7 @@ iInWord
 
         .section .bss
 
-iChar
+iChar:
         .skip 4
 
 
