@@ -118,14 +118,13 @@ else1:
 
             // iInWord = TRUE;
             mov x0, TRUE
-            ldr w3, iInWord
-            str x0, [w3]
+            adr x3, iInWord
+            ldr x3, [x3]
+            str x0, [x3]
 
 endIfInWord:
 
 endIf1:
-
-            ????????????????????????????????????????
 
             // if(iChar != '\n') goto endIfNewLine;
             adr x0, iChar
@@ -170,6 +169,6 @@ endIfNotInWord2:
 
         mov  w0, 0
         ldr x30, [sp]
-        add sp, sp MAIN_STACK_BYTECOUNT
+        add sp, sp, MAIN_STACK_BYTECOUNT
 
         .size   main, (. - main)
