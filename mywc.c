@@ -25,33 +25,59 @@ static int iInWord = FALSE;      /* Bad style. */
    are in stdin. A word is a sequence of non-whitespace characters.
    Whitespace is defined by the isspace() function. Return 0. */
 
+
 int main(void)
 {
-   while ((iChar = getchar()) != EOF)
-   {
+   whileLoop:
+      if ((iChar = getchar()) == EOF)
+      {
+         goto endWhileLoop;
+      }
+
       lCharCount++;
-
-      if (isspace(iChar))
+      
+      if (!isspace(iChar))
       {
-         if (iInWord)
-         {
-            lWordCount++;
-            iInWord = FALSE;
-         }
+         goto else1;
       }
-      else
+      
+      if (!iInWord)
       {
-         if (! iInWord)
-            iInWord = TRUE;
+         goto endIfNotInWord;
       }
-
-      if (iChar == '\n')
-         lLineCount++;
-   }
-
-   if (iInWord)
       lWordCount++;
+      iInWord = FALSE;
 
+      endIfNotInWord:
+
+      goto endIf1;
+      else1: 
+      if (iInWord){
+         goto endIfInWord;
+      }
+      iInWord = TRUE;
+
+      endIfInWord:
+         
+      endIf1:
+
+      if (iChar != '\n'){
+         goto endIfNewLine;
+      }
+      lLineCount++;
+
+      endIfNewLine:
+            
+      goto whileLoop;
+   endWhileLoop:
+
+   if (!iInWord){
+      goto endIfNotInWord2;
+   }
+   lWordCount++;
+
+   endIfNotInWord2:
+      
    printf("%7ld %7ld %7ld\n", lLineCount, lWordCount, lCharCount);
    return 0;
 }
