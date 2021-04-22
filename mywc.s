@@ -1,13 +1,16 @@
 //----------------------------------------------------------------------
-// absval.s
-// Author: Bob Dondero and William Ughetta
+// mywc.s
+// Author: Kevin Castro and Valeria Torres-Olivares
 //----------------------------------------------------------------------
 
-
     .equ FALSE, 0 
+
     .equ TRUE, 1
+
     .equ EOF, -1
+
     .equ NEW_LINE, '\n'
+
 //----------------------------------------------------------------------
 
         .section .rodata
@@ -62,7 +65,7 @@ main:
         sub     sp, sp, MAIN_STACK_BYTECOUNT
         str     x30, [sp]
 
-        whileLoop:
+whileLoop:
             // if ((iChar = getchar()) == EOF) goto endWhileLoop;
 
             bl getchar 
@@ -78,7 +81,6 @@ main:
 
             // if (!isspace(iChar)) goto else1;
 
-            ??????????????????????????????????????????????????????????
             adr x0, iChar
             ldr x0, [x0]
 
@@ -104,11 +106,10 @@ main:
             adr x3, iInWord
             str x0,[x3]
 
-            endIfNotInWord:
+endIfNotInWord:
             // goto endIf1;
             b endIf1
-
-            else1:  
+else1:  
 
             //if (iInWord) goto endIfInWord;
             adr x0,iInWord
@@ -120,9 +121,9 @@ main:
             ldr w3, iInWord
             str x0, [w3]
 
-            endIfInWord:
+endIfInWord:
 
-            endIf1:
+endIf1:
 
             ????????????????????????????????????????
 
@@ -139,11 +140,11 @@ main:
             add x2, x2, 1
             str x2, [x0]
 
-            endIfNewLine:
+endIfNewLine:
 
             b whileLoop
         
-        endWhileLoop:
+endWhileLoop:
 
         // if(!iInWord) goto endIfNotInWord2
         adr x0,iInWord
@@ -156,7 +157,7 @@ main:
         add x1, x1, 1
         str x1, [x0]
 
-        endIfNotInWord2:
+endIfNotInWord2:
 
         adr x0, printfFormatStr
         adr x1, lLineCount
@@ -170,3 +171,5 @@ main:
         mov  w0, 0
         ldr x30, [sp]
         add sp, sp MAIN_STACK_BYTECOUNT
+
+        .size   main, (. - main)
