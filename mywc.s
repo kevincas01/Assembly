@@ -131,8 +131,8 @@ endIf1:
             cmp x0, NEW_LINE
             bne endIfNewLine
 
-            // lWordCount++;
-            adr x0, lWordCount
+            // lLineCount++;
+            adr x0, lLineCount
             ldr x2, [x0]
             add x2, x2, 1
             str x2, [x0]
