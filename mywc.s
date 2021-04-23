@@ -72,10 +72,9 @@ whileLoop:
             bl getchar
             
             adr x3, iChar
-            str x0, [x3]
+            str w0, [x3]
 
-            
-            cmp x0, EOF
+            cmp w0, EOF
             beq endWhileLoop
 
             // lCharCount++;
