@@ -170,3 +170,4 @@ endIfNotInWord2:
         add sp, sp, MAIN_STACK_BYTECOUNT
 
         .size   main, (. - main)
+        
