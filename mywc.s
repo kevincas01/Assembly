@@ -114,7 +114,6 @@ else1:
             // iInWord = TRUE;
             mov x0, TRUE
             adr x3, iInWord
-            ldr x3, [x3]
             str x0, [x3]
 
 endIfInWord:
