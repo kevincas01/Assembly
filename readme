@@ -80,7 +80,11 @@ particular, what bugs are in your submission?
 
 ------------------------------------------------------------------------
 What is your mywc program test plan?
-
+We are going to test all aspects of the word count programs: which are 
+number of lines inlcuded, the number of characters, and number of words.
+We will vary all of tests to make sure it covers all the extremes, when 
+there are no lines, when there are only all lines, when there are no 
+characters, 
 
 
 ------------------------------------------------------------------------

@@ -66,10 +66,9 @@ main:
         str     x30, [sp]
 
 whileLoop:
-            // if ((iChar = getchar()) == EOF) goto endWhileLoop;
 
-            bl getchar 
-            ldr x0, [x0]
+            // if ((iChar = getchar()) == EOF) goto endWhileLoop;
+            bl getchar
             cmp x0, EOF
             beq endWhileLoop
 
@@ -80,13 +79,9 @@ whileLoop:
             str x1, [x0]
 
             // if (!isspace(iChar)) goto else1;
-
             adr x0, iChar
             ldr x0, [x0]
-
             bl isspace
-
-            ldr x0, [x0]
             cmp x0, FALSE
             beq else1
 
