@@ -125,15 +125,15 @@ endIf1:
 
             // if(iChar != '\n') goto endIfNewLine;
             adr x0, iChar
-            ldr x0, [x0]
-            cmp x0, NEW_LINE
+            ldr w1, [x0]
+            cmp w1, NEW_LINE
             bne endIfNewLine
 
             // lLineCount++;
             adr x0, lLineCount
-            ldr w2, [x0]
-            add w2, w2, 1
-            str w2, [x0]
+            ldr x2, [x0]
+            add x2, x2, 1
+            str x2, [x0]
 
 endIfNewLine:
 
@@ -170,4 +170,3 @@ endIfNotInWord2:
         add sp, sp, MAIN_STACK_BYTECOUNT
 
         .size   main, (. - main)
-        
