@@ -68,7 +68,6 @@ main:
 whileLoop:
 
             // if ((iChar = getchar()) == EOF) goto endWhileLoop;
-            
             bl getchar
             adr x3, iChar
             str w0, [x3]
@@ -90,7 +89,8 @@ whileLoop:
 
             // if(!iInWord) goto endIfNotInWord;
             adr x0,iInWord
-            cmp x0, FALSE
+            ldr w0,[x0]
+            cmp w0, FALSE
             beq endIfNotInWord
 
             // lWordCount++;
@@ -100,9 +100,9 @@ whileLoop:
             str x2, [x0]
 
             //iInWord = FALSE;
-            mov x0, FALSE
+            mov w0, FALSE
             adr x3, iInWord
-            str x0,[x3]
+            str w0,[x3]
 
 endIfNotInWord:
             // goto endIf1;
@@ -122,6 +122,7 @@ else1:
 endIfInWord:
 
 endIf1:
+
 
             // if(iChar != '\n') goto endIfNewLine;
             adr x0, iChar
