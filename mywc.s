@@ -70,10 +70,8 @@ whileLoop:
             // if ((iChar = getchar()) == EOF) goto endWhileLoop;
             
             bl getchar
-            
             adr x3, iChar
             str w0, [x3]
-
             cmp w0, EOF
             beq endWhileLoop
 
@@ -133,9 +131,9 @@ endIf1:
 
             // lLineCount++;
             adr x0, lLineCount
-            ldr x2, [x0]
-            add x2, x2, 1
-            str x2, [x0]
+            ldr w2, [x0]
+            add w2, w2, 1
+            str w2, [x0]
 
 endIfNewLine:
 
@@ -145,7 +143,8 @@ endWhileLoop:
 
         // if(!iInWord) goto endIfNotInWord2
         adr x0,iInWord
-        cmp x0, FALSE
+        ldr w1, [x0]
+        cmp w1, FALSE
         beq endIfNotInWord2
 
         // lWordCount++
@@ -153,6 +152,7 @@ endWhileLoop:
         ldr x1, [x0]
         add x1, x1, 1
         str x1, [x0]
+
 
 endIfNotInWord2:
 
