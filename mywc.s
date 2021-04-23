@@ -68,7 +68,12 @@ main:
 whileLoop:
 
             // if ((iChar = getchar()) == EOF) goto endWhileLoop;
+            
             bl getchar
+            
+            adr x3, iChar
+            str x0, [x3]
+
             cmp x0, EOF
             beq endWhileLoop
 
@@ -125,7 +130,6 @@ endIf1:
             ldr x0, [x0]
             cmp x0, NEW_LINE
             bne endIfNewLine
-
 
             // lWordCount++;
             adr x0, lWordCount
