@@ -87,7 +87,7 @@ whileLoop:
             adr x0, iChar
             ldr x0, [x0]
             bl isspace
-            cmp x0, FALSE
+            cmp w0, FALSE
             beq else1
 
             // if(!iInWord) goto endIfNotInWord;
