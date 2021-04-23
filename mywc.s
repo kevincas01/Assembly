@@ -7,7 +7,7 @@
 
     .equ TRUE, 1
 
-    .equ EOF, -1
+    .equ EOF, 4294967295
 
     .equ NEW_LINE, '\n'
 
@@ -64,7 +64,7 @@ main:
         // Prolog
         sub     sp, sp, MAIN_STACK_BYTECOUNT
         str     x30, [sp]
-
+4294967295
 whileLoop:
 
             // if ((iChar = getchar()) == EOF) goto endWhileLoop;
