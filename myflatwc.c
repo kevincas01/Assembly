@@ -1,6 +1,7 @@
 /*--------------------------------------------------------------------*/
 /* mywc.c                                                             */
-/* Author: Bob Dondero                                                */
+/* Author: Bob Dondero translated into C by
+/* Kevin Castro and Valeria Torres-Olivares                                               */
 /*--------------------------------------------------------------------*/
 
 #include <stdio.h>
