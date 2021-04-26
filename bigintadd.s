@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-// mywc.s
+// bigintadd.s
 // Author: Kevin Castro and Valeria Torres-Olivares
 // NOTE THIS IS NOT IT EXCEPT FOR THE DECLARATIONS
 //----------------------------------------------------------------------
@@ -8,20 +8,11 @@
 
         .equ TRUE, 1
 
-        .equ OADDEND1, 48
-
-        .equ ULCARRY, 24
-
-        .equ LLENGTH, 0
-
-        .equ SIZEOFU, 4
 
 //----------------------------------------------------------------------
 
         .section .rodata
 
-printfFormatStr:
-        .string "%7ld %7ld %7ld\n"
 
 //----------------------------------------------------------------------
 
@@ -46,209 +37,261 @@ printfFormatStr:
         //--------------------------------------------------------------
 
         // Must be a multiple of 16
-        .equ    MAIN_STACK_BYTECOUNT, 16 
+        .equ INT_LARGER_STACK_BYTECOUNT, 32
 
-        .global main
+        // Argument offsets
+        .equ lLength1, 8
+
+        .equ lLength2, 16
+
+        // Local variable offset
+        .equ lLarger, 24
 
 
 BigInt_larger:
-        sub sp, sp, ULCARRY
+        sub sp, sp, INT_LARGER_STACK_BYTECOUNT
 
         str x30, [sp] //return address
-        str x0,[sp,16] //Save lLength1
-        str x1,[sp,8] // Save lLength2
-
+        str x0,[sp,lLength1] //Save lLength1
+        str x1,[sp,lLength2] // Save lLength2
 
         // if (lLength1 <= lLength2) goto lLength2Larger;
-        ldr x1, [sp,16]
-        ldr x2, [sp,8]
+        ldr x1, [sp,lLength1]
+        ldr x2, [sp,lLength2]
         cmp x1, x2
         ble lLength2Larger
 
         // lLarger = lLength1;
-        ldr x1, [sp,16]
-        str x1,[sp,24]
+        ldr x1, [sp,lLength]
+        str x1,[sp,lLarger]
 
         b endIfBil
 
 lLength2Larger:
         // lLarger = lLength2;
-        ldr x1, [sp,8]
-        str x1,[sp,24]
+        ldr x1, [sp,lLength2]
+        str x1,[sp, lLarger]
 
 
 endIfBil:
         //return lLarger
-        ldr x30, [sp,24]
+        ldr x0, [sp,lLarger]
+        ldr x30, [sp]
+        add sp, sp, INT_LARGER_STACK_BYTECOUNT
         ret
 
 
 
 
-BigInt_add:
-        sub sp, sp, OADDEND1
+        // Stack offsets 
+        .equ INT_ADD_STACK_BYTECOUNT, 64
 
-        // how much space do we need to subtract from sp??
-???????????????????????????????????????????????????????????????????????
+        // Arguments in BigInt_add
+        .equ oAddend1, 8
+
+        .equ oAddend2, 16
+
+        .equ oSum, 24
+
+        // Local variables
+
+        .equ  ulCarry, 32
+
+        .equ ulSum, 40
+
+        .equ lIndex, 48
+
+        .equ lSumLength, 56
+
+        // Struct offset 
+
+        .equ lLength, 0
+
+        .equ aulDigits, 8
+
+
+        // Max Digits
+        .equ maxDigits, 32768
+
+        // Size of unsigned long 
+        .equ SIZEOFU, 8
+
+
+        .global BigInt_add
+BigInt_add:
+        sub sp, sp, INT_ADD_STACK_BYTECOUNT
 
         str x30, [sp] //return address
-        str x0,[sp,24] //Save oSum
-        str x1,[sp,16] // Save oAddend2
-        str x2,[sp,8] //save oAddend1
-
-
-        // BigInt_larger(oAddend1->lLength, oAddend2->lLength);
-
-        //How can we access the values of a structure
-
-        adr x0, [sp, 8 ]  // Load oAddend1
-        ldr x0, [x0, OFFSET ]
- ???????????????????????????????????????????????????????????????????????
-        ldr x0, [sp, 16]  // Load oAddend2
-  ???????????????????????????????????????????????????????????????????????
-        bl BigInt_larger
-        str x0, [sp, 56]  // Store lSumLength
+        str x0,[sp,oAddend1] // Save oAddend1
+        str x1,[sp,oAddend2] // Save oAddend2
+        str x2,[sp,oSum] // Save oSum
 
 
         // lSumLength = BigInt_larger(oAddend1->lLength, oAddend2->lLength);
+        
+        ldr x0, [sp, oAddend1] 
+        ldr x0,  [x0,lLength]
+        ldr x1, [sp, oAddend2]
+        ldr x1, [x1, lLength]
+
+        bl BigInt_larger
+        str x0, [sp, lSumLength]  // Store lSumLength
 
 
         // if (oSum->lLength <=lSumLength) goto else1bia;
-   
-        ldr x1, [sp,lLength for osum length address]
-        ldr x2, [sp, 56]
+        ldr x1, [sp,oSum]
+        ldr x1, [x1, lLength]
+        ldr x2, [sp, lSumLength]
         cmp x1,x2
-        // SIGNED OR UNSIGNED????????????????????????????????????????????????????
-        ble  else1bia
-
+        ble else1bia
 
         // memset(oSum->aulDigits, 0, MAX_DIGITS * sizeof(unsigned long));
-        ldr x0, [sp, address for auDigits] //???????????????????
-        mov x1, 0
-        mov x2, MAX_DIGITS
+        ldr x0, [sp, oSum]
+        add x0,  x0, aulDigits
+        mov w1, 0
+        mov x2, maxDigits
         mul x2, x2, SIZEOFU
-
         bl memset
-
 
 else1bia:
 
         // ulCarry = 0;
         mov x1,0
-        str x1, [sp,32]
+        str x1, [sp,ulCarry]
 
         // lIndex=0;
-        mov x1,0
-        str x1, [sp,48]
-
+        mov x1, 0
+        str x1, [sp,lIndex]
         
 forLoopbia:
-
         // if (lIndex >=lSumLength) goto endForLoopbia;
-        ldr x1, [sp,48]
-        ldr x2, [sp,56]
+        ldr x1, [sp,lIndex]
+        ldr x2, [sp,lSumLength]
         cmp x1, x2
         bge endForLoopbia
 
         // ulSum = ulCarry;
-        ldr x0, [sp, 32]
-        str x0, [sp,40]
+        ldr x0, [sp, ulCarry]
+        str x0, [sp,ulSum]
 
         // ulCarry = 0;
-        mov x1,0
-        str x1, [sp,32]
+        mov x1, 0
+        str x1, [sp, ulCarry]
 
         // ulSum += oAddend1->aulDigits[lIndex];
-        ldr x1, [sp, 40]
-        ldr x2, [sp, auDigits array at indeexlIndex address ]
-        add x1, x1, x2
-        str x1, [sp, 40]
+        ldr x1, [sp, oAddend1]
+        add x1,  x1, aulDigits
+        ldr x2, [sp, lIndex]
+
+        ldr x3, [x1, x2, lsl 3]
+        
+        ldr x4, [sp, ulSum]
+        add x4, x4, x3
+        str x4, [sp, ulSum]
 
         // if (ulSum >= oAddend1->aulDigits[lIndex]) goto noOverflow1bia;
-
-        ldr x1, [sp,40]
-        ldr x2, [sp, oAddend1->aulDigits[lIndex] address]
-        cmp x1, x2
-        bge noOverflow1bia
+        ldr x1, [sp,oAddend1]
+        add x1, x1, aulDigits
+        ldr x2, [sp, lIndex]
+        ldr x3, [x1, x2, lsl 3]
+        
+        ldr x4,[sp, ulSum]
+        cmp x4, x3
+        bhs noOverflow1bia
 
         // ulCarry = 1;
         mov x1,1
-        str x1, [sp,32]
+        str x1, [sp,ulCarry]
 
 noOverflow1bia:
 
 
         // ulSum += oAddend12->aulDigits[lIndex];
-        ldr x1, [sp, 40]
-        ldr x2, [sp, auDigits array at indeexlIndex address ]
-        add x1, x1, x2
-        str x1, [sp, 40]
+        lldr x1, [sp, oAddend2]
+        add x1,  x1, aulDigits
+        ldr x2, [sp, lIndex]
 
-        // if (ulSum >= oAddend2->aulDigits[lIndex]) goto noOverflow1bia;
+        ldr x3, [x1, x2, lsl 3]
+        
+        ldr x4, [sp, ulSum]
+        add x4, x4, x3
+        str x4, [sp, ulSum]
 
-        ldr x1, [sp,40]
-        ldr x2, [sp, oAddend2->aulDigits[lIndex] address]
-        cmp x1, x2
-        bge noOverflow2bia
+        // if (ulSum >= oAddend2->aulDigits[lIndex]) goto noOverflow2bia;
+        ldr x1, [sp,oAddend2]
+        add x1, x1, aulDigits
+        ldr x2, [sp, lIndex]
+        ldr x3, [x1, x2, lsl 3]
+        
+        ldr x4,[sp, ulSum]
+        cmp x4, x3
+        bhs noOverflow2bia
 
         // ulCarry = 1;
         mov x1,1
-        str x1, [sp,32]
+        str x1, [sp, ulCarry]
 
 noOverflow2bia:
 
 
         // oSum->aulDigits[lIndex] = ulSum;
-        ldr x1, [sp, 40]
-        str x1 [sp,oSum->aulDigits[lIndex]] ???????????????????????????
+        ldr x1, [sp,oSum]
+        add x1, x1, aulDigits
+        ldr x2, [sp, lIndex]
 
+        ldr x3, [sp, ulSum]
+        str x3, [x1, x2, lsl 3]
+        
         // lIndex++
-        ldr x1, [sp, 48]
+        ldr x1, [sp, lIndex]
         add x1, x1, 1
-        str x1,[sp, 48]
+        str x1,[sp, lIndex]
 
         b forLoopbia
 
 endForLoopbia:
         // if (ulCarry != 1) goto else2bia;
-        ldr x1, [sp, 32]
+        ldr x1, [sp, ulCarry]
         cmp x1, TRUE 
         bne else2bia
 
         // if (lSumLength != MAX_DIGITS) goto else3bia;
-        ldr x1, [sp, 56]
-        cmp x1, MAX_DIGITS
+        ldr x1, [sp, lSumLength]
+        cmp x1, maxDigits
         bne else3bia
 
-        // return false
-        mov x30, FALSE
+        // Epilogue & return false
+        mov w0, FALSE
+        ldr x30, [sp]
+        add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
 
 else3bia:
 
         // oSum->aulDigits[lIndex] = 1;
-        mov x1, TRUE
-        str x1 [sp,oSum->aulDigits[lIndex]] ???????????????????????????
+        ldr x1, [sp,oSum]
+        add x1, x1, aulDigits
+        ldr x2, [sp, lIndex]
 
+        mov x3, 1
+        str x3, [x1, x2, lsl 3]
 
         // lSumLength++
-        ldr x1, [sp, 56]
+        ldr x1, [sp, lSumLength]
         add x1, x1, 1
-        str x1, [sp, 56]
+        str x1, [sp, lSumLength]
 
 else2bia:
 
         // oSum->lLength = lSumLength;
+        ldr x1, [sp, oSum]
+        ldr x2, [sp, lSumLength]
+        str x2, [x1,lLength]
 
-        ldr x1, [sp, 56]
-        str x1 [sp,oSum->lLength address] ???????????????????????????
-
-
-        // Epilog
-        //return TRUE
-
-
-        mov x30, TRUE
+        // Epilogue & return TRUE
+        mov w0, TRUE
+        ldr x30, [sp]
+        add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
 
 
