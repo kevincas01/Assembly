@@ -3,6 +3,7 @@
 /* Author: Valeria Torres-Olivares & Kevin Castro                                                */
 /*--------------------------------------------------------------------*/
 
+
 #include "bigint.h"
 #include "bigintprivate.h"
 #include <assert.h>
@@ -10,6 +11,9 @@
 #include <string.h>
 #include <limits.h>
 #include <ctype.h>
+
+/* In lieu of a boolean data type. */
+enum {FALSE, TRUE};
 
 /*--------------------------------------------------------------------*/
 
@@ -87,10 +91,11 @@ int BigInt_add(BigInt_T oAddend1, BigInt_T oAddend2, BigInt_T oSum)
 
    /* Check for a carry out of the last "column" of the addition. */
    if (ulCarry != 1) {
-      goto else1:
+      goto else1;
    }
-   if (lSumLength != MAX_DIGITS)
+   if (lSumLength != MAX_DIGITS) {
       goto else2;
+   }
 
    return FALSE;
    oSum->aulDigits[lSumLength] = 1;
