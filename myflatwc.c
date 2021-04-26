@@ -53,6 +53,7 @@ int main(void)
 
       goto endIf1;
       else1: 
+      
       if (iInWord){
          goto endIfInWord;
       }

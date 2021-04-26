@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------*/
-/* bigint.c                                                           */
+/* bigintaddflat.c                                                           */
 /* Author: Valeria Torres-Olivares & Kevin Castro                                                */
 /*--------------------------------------------------------------------*/
 
@@ -7,10 +7,7 @@
 #include "bigint.h"
 #include "bigintprivate.h"
 #include <assert.h>
-#include <stdlib.h>
 #include <string.h>
-#include <limits.h>
-#include <ctype.h>
 
 /* In lieu of a boolean data type. */
 enum {FALSE, TRUE};
@@ -20,14 +17,17 @@ enum {FALSE, TRUE};
 static long BigInt_larger(long lLength1, long lLength2) {
    
    long lLarger;
-   if (lLength1 < lLength2) {
-      goto lLength1Larger;
+   if (lLength1 <= lLength2) {
+      goto lLength2Larger;
    }
-   lLarger = lLength2;
-
-   lLength1Larger:
    lLarger = lLength1;
 
+   goto endifbil;
+
+   lLength2Larger:
+   lLarger = lLength2;
+
+   endifbil:
    return lLarger;
 }
 
@@ -54,58 +54,61 @@ int BigInt_add(BigInt_T oAddend1, BigInt_T oAddend2, BigInt_T oSum)
    lSumLength = BigInt_larger(oAddend1->lLength, oAddend2->lLength);
 
    /* Clear oSum's array if necessary. QUESTION idk about this one where would else go*/
-   if (oSum->lLength < lSumLength)
-      goto else1;
+   if (oSum->lLength <=lSumLength){
+      goto else1bia;
+   }
+      
    memset(oSum->aulDigits, 0, MAX_DIGITS * sizeof(unsigned long));
 
-   /* would else1 go here??? */
+   else1bia:
 
    /* Perform the addition. */
    ulCarry = 0;
-
-   forLoop:
-      if (!lIndex < lSumLength)
-         goto endForLoop;
+   lIndex=0;
+   forLoopbia:
+      if (lIndex >=lSumLength){
+         goto endForLoopbia;
+      }
       
       ulSum = ulCarry;
       ulCarry = 0;
 
       ulSum += oAddend1->aulDigits[lIndex];
-      if (ulSum > oAddend1->aulDigits[lIndex]) /* Check for overflow. */
-         goto noOverflow;
+      if (ulSum >= oAddend1->aulDigits[lIndex]){ /* Check for overflow. */
+         goto noOverflow1bia;
+      }
       ulCarry = 1;
+      noOverflow1bia:
 
       ulSum += oAddend2->aulDigits[lIndex];
-      if (ulSum > oAddend2->aulDigits[lIndex]) /* Check for overflow. */
-         goto noOverflow;
+      if (ulSum >= oAddend2->aulDigits[lIndex]) {/* Check for overflow. */
+         goto noOverflow2bia;
+      }
       ulCarry = 1;
 
-      noOverflow: /* DOUBLE CHECK ??*/
+      noOverflow2bia: /* DOUBLE CHECK ??*/
 
       oSum->aulDigits[lIndex] = ulSum;
 
       lIndex++;
-      goto forLoop;
-   
-   endForLoop:
+      goto forLoopbia;
+   endForLoopbia:
 
    /* Check for a carry out of the last "column" of the addition. */
    if (ulCarry != 1) {
-      goto else1;
+      goto else2bia;
    }
+   
    if (lSumLength != MAX_DIGITS) {
-      goto else2;
+      goto else3bia;
    }
-
    return FALSE;
+
+   else3bia:
    oSum->aulDigits[lSumLength] = 1;
    lSumLength++;
 
-   else2:
-   /* IDK ??*/
-
-   else1:
-   /* IDK ??*/
+   else2bia:
 
    /* Set the length of the sum. */
    oSum->lLength = lSumLength;
