@@ -54,6 +54,8 @@
         OADDEND1 .req x19
         OADDEND2 .req x20
         OSUM .req x21
+        LLENGTH1 .req x27
+        LLENGTH2 .req x28
 
         // Registers for local variables
         ULCARRY .req x22
@@ -61,8 +63,7 @@
         LINDEX .req x24
         LSUMLENGTH .req x25
         LLARGER .req x26
-        LLENGTH1 .req x27
-        LLENGTH2 .req x28
+
 
         .global BigInt_add 
 
@@ -83,6 +84,8 @@ BigInt_add:
         mov OADDEND1,  x0
         mov OADDEND2, x1
         mov OSUM, x2
+        mov LLENGTH1, x3
+        mov LLENGTH2, x4
 
 
         // lSumLength = BigInt_larger(oAddend1->lLength, oAddend2->lLength);
