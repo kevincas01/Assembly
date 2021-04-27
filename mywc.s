@@ -169,5 +169,5 @@ endIfNotInWord2:
         mov  w0, 0
         ldr x30, [sp]
         add sp, sp, MAIN_STACK_BYTECOUNT
-
+        ret
         .size   main, (. - main)

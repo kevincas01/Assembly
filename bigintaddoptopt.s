@@ -118,7 +118,6 @@ else1bia:
         mov x1, 1
         mov x2, 2
         adcs x3, x1, x2 
-        
 
         // lIndex=0;
         mov LINDEX, 0

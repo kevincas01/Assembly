@@ -1,5 +1,5 @@
 //----------------------------------------------------------------------
-// bigintaddopt.s
+// bigintaddoptopt.s
 // Author: Kevin Castro and Valeria Torres-Olivares
 //----------------------------------------------------------------------
 
@@ -26,6 +26,8 @@
 
 
 //----------------------------------------------------------------------
+
+
 
         .section .text
 
@@ -82,7 +84,6 @@ BigInt_add:
 
         // lSumLength = BigInt_larger(oAddend1->lLength, oAddend2->lLength);
 
-
         // if (lLength1 <= lLength2) goto lLength2Larger;
         ldr x0,  [OADDEND1, lLength] // lLength1
         ldr x1, [OADDEND2, lLength] // lLength2
@@ -130,7 +131,6 @@ else1bia:
         // if (lIndex >= lSumLength) goto forLoopbia;
         cmp LINDEX, LSUMLENGTH
         bge endForLoopbia
-
 
 forLoopbia:
 
@@ -237,4 +237,3 @@ else2bia:
         ldr x26, [sp, 64] //
         add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret
-        

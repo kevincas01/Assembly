@@ -153,6 +153,10 @@ forLoopbia:
         ldr x2, [x1, LINDEX, lsl 3]
         cmp ULSUM, x2
         bhs noOverflow1bia
+
+        // ulCarry = 1;
+        mov ULCARRY, 1
+
 noOverflow1bia:
 
         // ulSum += oAddend2->aulDigits[lIndex];
@@ -235,4 +239,3 @@ else2bia:
         ldr x26, [sp, 64] //
         add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret
-        
