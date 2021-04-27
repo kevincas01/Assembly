@@ -109,7 +109,6 @@ endIfBil:
 
         .equ aulDigits, 8
 
-
         // Max Digits
         .equ maxDigits, 32768
 
@@ -150,8 +149,7 @@ BigInt_add:
         add x0,  x0, aulDigits
         mov w1, 0
         mov x2, maxDigits
-        mov x3, SIZEOFU
-        mul x2, x2, x3
+        lsl x2, x2, 3
         bl memset
 
 else1bia:
@@ -173,7 +171,7 @@ forLoopbia:
 
         // ulSum = ulCarry;
         ldr x0, [sp, ulCarry]
-        str x0, [sp,ulSum]
+        str x0, [sp, ulSum]
 
         // ulCarry = 0;
         mov x1, 0
