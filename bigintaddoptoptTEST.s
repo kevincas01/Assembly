@@ -91,9 +91,9 @@ BigInt_add:
 
 
         // if (lLength1 <= lLength2) goto lLength2Larger;
-        ldr x0,  [OADDEND1, lLength] // lLength1
+        ldr x0,  [OADDEND1, LLENGTH1] // lLength1
         mov LLENGTH1, x0
-        ldr x1, [OADDEND2, lLength] // lLength2
+        ldr x1, [OADDEND2, LLENGTH2] // lLength2
         mov LLENGTH2, x1
         
         cmp LLENGTH1, LLENGTH2
