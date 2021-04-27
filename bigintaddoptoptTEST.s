@@ -38,7 +38,7 @@
         // Must be a multiple of 16
 
         // Stack offsets 
-        .equ INT_ADD_STACK_BYTECOUNT, 88
+        .equ INT_ADD_STACK_BYTECOUNT, 80
 
         // Struct offset 
 
@@ -55,16 +55,12 @@
         OADDEND2 .req x20
         OSUM .req x21
 
-
         // Registers for local variables
         ULCARRY .req x22
         ULSUM  .req x23
         LINDEX .req x24
         LSUMLENGTH .req x25
         LLARGER .req x26
-        LLENGTH1 .req x27
-        LLENGTH2 .req x28
-
 
         .global BigInt_add 
 
@@ -79,35 +75,29 @@ BigInt_add:
         str x23,[sp, 40] // Save x23
         str x24,[sp, 48] // Save x24
         str x25,[sp, 56] // Save x25
-        str x26,[sp, 64] // Save x26
-        str x27,[sp, 72] // Save x27
-        str x28,[sp, 80] // Save x28
+        str x26, [sp, 64] // Save x26
         mov OADDEND1,  x0
         mov OADDEND2, x1
         mov OSUM, x2
-
 
         // lSumLength = BigInt_larger(oAddend1->lLength, oAddend2->lLength);
 
 
         // if (lLength1 <= lLength2) goto lLength2Larger;
-        ldr x0,  [OADDEND1, LLENGTH1] // lLength1
-        mov LLENGTH1, x0
-        ldr x1, [OADDEND2, LLENGTH2] // lLength2
-        mov LLENGTH2, x1
-        
-        cmp LLENGTH1, LLENGTH2
+        ldr x0,  [OADDEND1, lLength] // lLength1
+        ldr x1, [OADDEND2, lLength] // lLength2
+        cmp x0, x1
         ble lLength2Larger
 
         // lLarger = lLength1;
-        ldr x0,  LLENGTH1 // lLength1
+        ldr x0,  [OADDEND1, lLength] // lLength1
         mov LLARGER, x0
 
         b endIfbil
 
 lLength2Larger:
         // lLarger = lLength2;
-        ldr x1, LLENGTH2 // lLength2
+        ldr x1, [OADDEND2, lLength] // lLength2
         mov LLARGER, x1
 
         //????????????????????????????????????????????????????????????
@@ -156,6 +146,7 @@ forLoopbia:
         add ULSUM, ULSUM, x2
 
         // if (ulSum >= oAddend1->aulDigits[lIndex]) goto noOverflow1bia;
+        
         add x1, OADDEND1, aulDigits
         ldr x2, [x1, LINDEX, lsl 3]
         cmp ULSUM, x2
@@ -216,17 +207,20 @@ endForLoopbia:
         ldr x25,[sp, 56] // Save x25
         ldr x26, [sp, 64] //
         add sp, sp, INT_ADD_STACK_BYTECOUNT
+        adc sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
 
 else3bia:
 
         // oSum->aulDigits[lIndex] = 1;
         add x1, OSUM, aulDigits
+        adc x1, OSUM, aulDigits
         mov x2, 1
         str x2, [x1, LINDEX, lsl 3]
 
         // lSumLength++
         add LSUMLENGTH, LSUMLENGTH, 1
+        adc LSUMLENGTH, LSUMLENGTH, 1
 
 else2bia:
 
@@ -245,4 +239,5 @@ else2bia:
         ldr x25,[sp, 56] // Save x25
         ldr x26, [sp, 64] //
         add sp, sp, INT_ADD_STACK_BYTECOUNT
+        adc sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
