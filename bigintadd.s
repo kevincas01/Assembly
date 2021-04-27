@@ -219,7 +219,7 @@ noOverflow1bia:
         str x4, [sp, ulSum]
 
         // if (ulSum >= oAddend2->aulDigits[lIndex]) goto noOverflow2bia;
-        ldr x1, [sp,oAddend2]
+        ldr x1, [sp, oAddend2]
         add x1, x1, aulDigits
         ldr x2, [sp, lIndex]
         ldr x3, [x1, x2, lsl 3]
@@ -236,7 +236,7 @@ noOverflow2bia:
 
 
         // oSum->aulDigits[lIndex] = ulSum;
-        ldr x1, [sp,oSum]
+        ldr x1, [sp, oSum]
         add x1, x1, aulDigits
         ldr x2, [sp, lIndex]
 
