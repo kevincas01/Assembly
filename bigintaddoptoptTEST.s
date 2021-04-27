@@ -204,20 +204,20 @@ endForLoopbia:
         ldr x25,[sp, 56] // Save x25
         ldr x26, [sp, 64] //
         add sp, sp, INT_ADD_STACK_BYTECOUNT
-        adc sp, sp, INT_ADD_STACK_BYTECOUNT
+        add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
 
 else3bia:
 
         // oSum->aulDigits[lIndex] = 1;
         add x1, OSUM, aulDigits
-        adc x1, OSUM, aulDigits
+        add x1, OSUM, aulDigits
         mov x2, 1
         str x2, [x1, LINDEX, lsl 3]
 
         // lSumLength++
         add LSUMLENGTH, LSUMLENGTH, 1
-        adc LSUMLENGTH, LSUMLENGTH, 1
+        add LSUMLENGTH, LSUMLENGTH, 1
 
 else2bia:
 
@@ -236,5 +236,5 @@ else2bia:
         ldr x25,[sp, 56] // Save x25
         ldr x26, [sp, 64] //
         add sp, sp, INT_ADD_STACK_BYTECOUNT
-        adc sp, sp, INT_ADD_STACK_BYTECOUNT
+        add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
