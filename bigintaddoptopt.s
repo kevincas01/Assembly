@@ -132,7 +132,6 @@ else1bia:
 forLoopbia:
         // ulSum = ulCarry;
         bcc carry0
-
         
         //if carry flag is set, move 1  into  ULSUM
         mov ULSUM, 1
