@@ -63,7 +63,7 @@ BigInt_larger:
         ble lLength2Larger
 
         // lLarger = lLength1;
-        ldr x1, [sp,lLength]
+        ldr x1, [sp,lLength1]
         str x1,[sp,lLarger]
 
         b endIfbil
@@ -290,4 +290,3 @@ else2bia:
         add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
         .size BigInt_add,  (.-BigInt_add)
-        
