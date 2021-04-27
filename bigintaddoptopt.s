@@ -143,35 +143,12 @@ forLoopbia:
         // ulSum += oAddend1->aulDigits[lIndex];
         add x1,  OADDEND1, aulDigits
         ldr x2, [x1, LINDEX, lsl 3]
-        add ULSUM, ULSUM, x2
-
-        // if (ulSum >= oAddend1->aulDigits[lIndex]) goto noOverflow1bia;
-        
-        add x1, OADDEND1, aulDigits
-        ldr x2, [x1, LINDEX, lsl 3]
-        cmp ULSUM, x2
-        bhs noOverflow1bia
-
-        // ulCarry = 1;
-        mov ULCARRY, 1
-
-noOverflow1bia:
+        adcs ULSUM, ULSUM, x2
 
         // ulSum += oAddend2->aulDigits[lIndex];
         add x1,  OADDEND2, aulDigits
         ldr x2, [x1, LINDEX, lsl 3]
-        add ULSUM, ULSUM, x2
-
-        // if (ulSum >= oAddend2->aulDigits[lIndex]) goto noOverflow2bia;
-        add x1, OADDEND2, aulDigits
-        ldr x2, [x1, LINDEX, lsl 3]
-        cmp ULSUM, x2
-        bhs noOverflow2bia
-
-        // ulCarry = 1;
-        mov ULCARRY, 1
-
-noOverflow2bia:
+        adcs ULSUM, ULSUM, x2
 
         // oSum->aulDigits[lIndex] = ulSum;
         add x1, OSUM, aulDigits
@@ -180,7 +157,6 @@ noOverflow2bia:
         // lIndex++
         add LINDEX, LINDEX, 1
 
-
         // if (lIndex < lSumLength) goto forLoopbia;
         cmp LINDEX, LSUMLENGTH
         blt forLoopbia
@@ -188,8 +164,7 @@ noOverflow2bia:
 endForLoopbia:
 
         // if (ulCarry != 1) goto else2bia;
-        cmp ULCARRY, 1 
-        bne else2bia
+        jnc else2bia
 
         // if (lSumLength != MAX_DIGITS) goto else3bia;
         cmp LSUMLENGTH, maxDigits
