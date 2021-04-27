@@ -181,15 +181,6 @@ noOverflow2bia:
 endForLoopbia:
 
 
-// dont be afraid to  change the structure of the loop 
-what changes that carry? think about it
-any cmp  changes it 
-
-
-how else do we  move around?
-Look for any other conditional branching other than cmp 
-
-
 
         // if (ulCarry != 1) goto else2bia;
         cmp ULCARRY, 1 
