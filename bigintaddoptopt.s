@@ -115,7 +115,10 @@ endIfbil:
 else1bia:
 
         // ulCarry = 0;
-        clc
+        mov x1, 1
+        mov x2, 2
+        adcs x3, x1, x2 
+        
 
         // lIndex=0;
         mov LINDEX, 0
@@ -140,7 +143,9 @@ carry0:
 end:
 
         // ulCarry = 0;
-        clc
+        mov x1, 1
+        mov x2, 2
+        adcs x3, x1, x2 
 
         // ulSum += oAddend1->aulDigits[lIndex];
         add x1,  OADDEND1, aulDigits
