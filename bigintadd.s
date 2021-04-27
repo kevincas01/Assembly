@@ -150,7 +150,8 @@ BigInt_add:
         add x0,  x0, aulDigits
         mov w1, 0
         mov x2, maxDigits
-        mul x2, x2, SIZEOFU
+        mov x3, SIZEOFU
+        mul x2, x2, x3
         bl memset
 
 else1bia:
@@ -207,7 +208,7 @@ noOverflow1bia:
 
 
         // ulSum += oAddend12->aulDigits[lIndex];
-        lldr x1, [sp, oAddend2]
+        ldr x1, [sp, oAddend2]
         add x1,  x1, aulDigits
         ldr x2, [sp, lIndex]
 
