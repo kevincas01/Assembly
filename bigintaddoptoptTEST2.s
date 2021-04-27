@@ -27,6 +27,8 @@
 
 //----------------------------------------------------------------------
 
+
+
         .section .text
 
         //--------------------------------------------------------------
@@ -94,7 +96,6 @@ BigInt_add:
         mov LLARGER, x0
 
         b endIfbil
-
 lLength2Larger:
         // lLarger = lLength2;
         ldr x1, [OADDEND2, lLength] // lLength2
@@ -116,6 +117,7 @@ endIfbil:
         mov x2, maxDigits
         lsl x2, x2, 3
         bl memset
+
 
 else1bia:
 
@@ -143,12 +145,31 @@ forLoopbia:
         // ulSum += oAddend1->aulDigits[lIndex];
         add x1,  OADDEND1, aulDigits
         ldr x2, [x1, LINDEX, lsl 3]
-        adcs ULSUM, ULSUM, x2
+        add ULSUM, ULSUM, x2
+
+        // if (ulSum >= oAddend1->aulDigits[lIndex]) goto noOverflow1bia;
+        
+        add x1, OADDEND1, aulDigits
+        ldr x2, [x1, LINDEX, lsl 3]
+        cmp ULSUM, x2
+        bhs noOverflow1bia
+noOverflow1bia:
 
         // ulSum += oAddend2->aulDigits[lIndex];
         add x1,  OADDEND2, aulDigits
         ldr x2, [x1, LINDEX, lsl 3]
-        adcs ULSUM, ULSUM, x2
+        add ULSUM, ULSUM, x2
+
+        // if (ulSum >= oAddend2->aulDigits[lIndex]) goto noOverflow2bia;
+        add x1, OADDEND2, aulDigits
+        ldr x2, [x1, LINDEX, lsl 3]
+        cmp ULSUM, x2
+        bhs noOverflow2bia
+
+        // ulCarry = 1;
+        mov ULCARRY, 1
+
+noOverflow2bia:
 
         // oSum->aulDigits[lIndex] = ulSum;
         add x1, OSUM, aulDigits
@@ -157,6 +178,7 @@ forLoopbia:
         // lIndex++
         add LINDEX, LINDEX, 1
 
+
         // if (lIndex < lSumLength) goto forLoopbia;
         cmp LINDEX, LSUMLENGTH
         blt forLoopbia
@@ -164,7 +186,8 @@ forLoopbia:
 endForLoopbia:
 
         // if (ulCarry != 1) goto else2bia;
-        jnc else2bia
+        cmp ULCARRY, 1 
+        bne else2bia
 
         // if (lSumLength != MAX_DIGITS) goto else3bia;
         cmp LSUMLENGTH, maxDigits
@@ -183,7 +206,6 @@ endForLoopbia:
         ldr x26, [sp, 64] //
         add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
-
 
 else3bia:
 
@@ -212,4 +234,5 @@ else2bia:
         ldr x25,[sp, 56] // Save x25
         ldr x26, [sp, 64] //
         add sp, sp, INT_ADD_STACK_BYTECOUNT
-        ret 
+        ret
+        
