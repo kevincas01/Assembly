@@ -125,10 +125,14 @@ else1bia:
         // lIndex=0;
         mov LINDEX, 0
         
-forLoopbia:
-        // if (lIndex >=lSumLength) goto endForLoopbia;
+
+
+        // if (lIndex >= lSumLength) goto forLoopbia;
         cmp LINDEX, LSUMLENGTH
         bge endForLoopbia
+
+
+forLoopbia:
 
         // ulSum = ulCarry;
         mov ULSUM, ULCARRY
@@ -176,11 +180,12 @@ noOverflow2bia:
         // lIndex++
         add LINDEX, LINDEX, 1
 
-        b forLoopbia
+
+        // if (lIndex < lSumLength) goto forLoopbia;
+        cmp LINDEX, LSUMLENGTH
+        blt forLoopbia
 
 endForLoopbia:
-
-
 
         // if (ulCarry != 1) goto else2bia;
         cmp ULCARRY, 1 
