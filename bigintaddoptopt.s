@@ -36,48 +36,9 @@
         //--------------------------------------------------------------
 
         // Must be a multiple of 16
-        .equ INT_LARGER_STACK_BYTECOUNT, 32
-
-        LLENGTH1 .req x19
-        LLENGTH2 .req x20
-        LLARGER .req x21
-
-BigInt_larger:
-        sub sp, sp, INT_LARGER_STACK_BYTECOUNT
-
-        str x30, [sp] //return address
-        str x19,[sp, 8] // Save x19
-        str x20,[sp, 16 ] // Save x20
-        str x21,[sp, 24 ] // Save x21
-        mov LLENGTH1, x0
-        mov LLENGTH2, x1
-
-        // if (lLength1 <= lLength2) goto lLength2Larger;
-        cmp LLENGTH1, LLENGTH2
-        ble lLength2Larger
-
-        // lLarger = lLength1;
-        mov LLARGER, LLENGTH1
-
-        b endIfbil
-
-lLength2Larger:
-        // lLarger = lLength2;
-        mov LLARGER, LLENGTH2
-
-endIfbil:
-        //Epilogue & return lLarger
-        mov x0, LLARGER
-        ldr x30, [sp]
-        ldr x19, [sp,8]
-        ldr x20, [sp,16]
-        ldr x21, [sp,24]
-        add sp, sp, INT_LARGER_STACK_BYTECOUNT
-        ret
-
 
         // Stack offsets 
-        .equ INT_ADD_STACK_BYTECOUNT, 64
+        .equ INT_ADD_STACK_BYTECOUNT, 80
 
         // Struct offset 
 
@@ -114,6 +75,7 @@ BigInt_add:
         str x23,[sp, 40] // Save x23
         str x24,[sp, 48] // Save x24
         str x25,[sp, 56] // Save x25
+        str x26, [sp, 64] // Save x26
         mov OADDEND1,  x0
         mov OADDEND2, x1
         mov OSUM, x2
@@ -219,8 +181,13 @@ noOverflow2bia:
 endForLoopbia:
 
 
+// dont be afraid to  change the structure of the loop 
+what changes that carry? think about it
+any cmp  changes it 
 
 
+how else do we  move around?
+Look for any other conditional branching other than cmp 
 
 
 
@@ -242,6 +209,7 @@ endForLoopbia:
         ldr x23,[sp, 40] // Save x23
         ldr x24,[sp, 48] // Save x24
         ldr x25,[sp, 56] // Save x25
+        ldr x26, [sp, 64] //
         add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
 
@@ -270,5 +238,6 @@ else2bia:
         ldr x23,[sp, 40] // Save x23
         ldr x24,[sp, 48] // Save x24
         ldr x25,[sp, 56] // Save x25
+        ldr x26, [sp, 64] //
         add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
