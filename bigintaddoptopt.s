@@ -115,6 +115,9 @@ endIfbil:
 else1bia:
 
         // ulCarry = 0;
+        mov x1, 1
+        mov x2, 2
+        adcs x3, x1, x2 
         
 
         // lIndex=0;
@@ -131,7 +134,6 @@ forLoopbia:
         bcc carry0
 
         
-        
         //if carry flag is set, move 1  into  ULSUM
         mov ULSUM, 1
         b end
@@ -142,7 +144,9 @@ carry0:
 end:
 
         // ulCarry = 0;
-        
+        mov x1, 1
+        mov x2, 2
+        adcs x3, x1, x2 
 
         // ulSum += oAddend1->aulDigits[lIndex];
         add x1,  OADDEND1, aulDigits
