@@ -49,18 +49,17 @@
         // Max Digits
         .equ maxDigits, 32768
 
-
         // Registers for parameters 
         OADDEND1 .req x19
         OADDEND2 .req x20
         OSUM .req x21
 
         // Registers for local variables
-        ULCARRY .req x22
-        ULSUM  .req x23
-        LINDEX .req x24
-        LSUMLENGTH .req x25
-        LLARGER .req x26
+        
+        ULSUM  .req x22
+        LINDEX .req x23
+        LSUMLENGTH .req x24
+        LLARGER .req x25
 
         .global BigInt_add 
 
@@ -74,14 +73,12 @@ BigInt_add:
         str x22,[sp, 32] // Save x22
         str x23,[sp, 40] // Save x23
         str x24,[sp, 48] // Save x24
-        str x25,[sp, 56] // Save x25
-        str x26, [sp, 64] // Save x26
+        str x25,[sp, 56] // Save x25\
         mov OADDEND1,  x0
         mov OADDEND2, x1
         mov OSUM, x2
 
         // lSumLength = BigInt_larger(oAddend1->lLength, oAddend2->lLength);
-
 
         // if (lLength1 <= lLength2) goto lLength2Larger;
         ldr x0,  [OADDEND1, lLength] // lLength1
@@ -99,8 +96,6 @@ lLength2Larger:
         // lLarger = lLength2;
         ldr x1, [OADDEND2, lLength] // lLength2
         mov LLARGER, x1
-
-        //????????????????????????????????????????????????????????????
 
 endIfbil:
         mov LSUMLENGTH, LLARGER
@@ -120,12 +115,11 @@ endIfbil:
 else1bia:
 
         // ulCarry = 0;
-        mov ULCARRY, 0
+        clc
 
         // lIndex=0;
         mov LINDEX, 0
         
-
 
         // if (lIndex >= lSumLength) goto forLoopbia;
         cmp LINDEX, LSUMLENGTH
@@ -133,12 +127,23 @@ else1bia:
 
 
 forLoopbia:
-
         // ulSum = ulCarry;
-        mov ULSUM, ULCARRY
+        jc carry1
+        jnc carry0
+        
+carry1:
+        //if carry flag is set, move 1  into  ULSUM
+        mov ULSUM, 1
+    
+        b end
+carry0:
+        //if carry flag is not set,move 0  into  ULSUM
+        mov ULSUM, 0
+
+end:
 
         // ulCarry = 0;
-        mov ULCARRY, 0
+        clc
 
         // ulSum += oAddend1->aulDigits[lIndex];
         add x1,  OADDEND1, aulDigits
@@ -173,14 +178,13 @@ endForLoopbia:
         // Epilogue & return false
         mov w0, FALSE
         ldr x30, [sp]
-        ldr x19,[sp, 8] // Save x19
-        ldr x20,[sp, 16] // Save x20
-        ldr x21,[sp, 24] // Save x21
-        ldr x22,[sp, 32] // Save x22
-        ldr x23,[sp, 40] // Save x23
-        ldr x24,[sp, 48] // Save x24
-        ldr x25,[sp, 56] // Save x25
-        ldr x26, [sp, 64] //
+        ldr x19,[sp, 8] // Restore x19
+        ldr x20,[sp, 16] // Restore x20
+        ldr x21,[sp, 24] // Restore x21
+        ldr x22,[sp, 32] // Restore x22
+        ldr x23,[sp, 40] // Restore x23
+        ldr x24,[sp, 48] // Restore x24
+        ldr x25,[sp, 56] // Restore x25
         add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
 
@@ -201,14 +205,13 @@ else2bia:
 
         // Epilogue & return TRUE
         mov w0, TRUE
-        ldr x30, [sp]
-        ldr x19,[sp, 8] // Save x19
-        ldr x20,[sp, 16] // Save x20
-        ldr x21,[sp, 24] // Save x21
-        ldr x22,[sp, 32] // Save x22
-        ldr x23,[sp, 40] // Save x23
-        ldr x24,[sp, 48] // Save x24
-        ldr x25,[sp, 56] // Save x25
-        ldr x26, [sp, 64] //
+        ldr x30, [sp] // Restore return address
+        ldr x19,[sp, 8] // Restore x19
+        ldr x20,[sp, 16] // Restore x20
+        ldr x21,[sp, 24] // Restore x21
+        ldr x22,[sp, 32] // Restore x22
+        ldr x23,[sp, 40] // Restore x23
+        ldr x24,[sp, 48] // Restore x24
+        ldr x25,[sp, 56] // Restore x25
         add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
