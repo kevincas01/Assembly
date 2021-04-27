@@ -128,13 +128,10 @@ else1bia:
 
 forLoopbia:
         // ulSum = ulCarry;
-        jc carry1
-        jnc carry0
+        bcc carry0
         
-carry1:
         //if carry flag is set, move 1  into  ULSUM
         mov ULSUM, 1
-    
         b end
 carry0:
         //if carry flag is not set,move 0  into  ULSUM
@@ -169,7 +166,7 @@ end:
 endForLoopbia:
 
         // if (ulCarry != 1) goto else2bia;
-        jnc else2bia
+        bcc else2bia
 
         // if (lSumLength != MAX_DIGITS) goto else3bia;
         cmp LSUMLENGTH, maxDigits
