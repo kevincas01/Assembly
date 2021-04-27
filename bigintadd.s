@@ -81,6 +81,8 @@ endIfbil:
         add sp, sp, INT_LARGER_STACK_BYTECOUNT
         ret
 
+        .size BigInt_larger,  (.-BigInt_larger)
+
 
         // Stack offsets 
         .equ INT_ADD_STACK_BYTECOUNT, 64
@@ -239,7 +241,7 @@ noOverflow2bia:
         // lIndex++
         ldr x1, [sp, lIndex]
         add x1, x1, 1
-        str x1,[sp, lIndex]
+        str x1, [sp, lIndex]
 
         b forLoopbia
 
@@ -287,7 +289,4 @@ else2bia:
         ldr x30, [sp]
         add sp, sp, INT_ADD_STACK_BYTECOUNT
         ret 
-
-
-
-
+        .size BigInt_add,  (.-BigInt_add)
