@@ -105,20 +105,30 @@ None
 Student 1: What is your assessment of the assignment? Was it helpful?
 Was it fun?
 
-
+This assignment was fun, almost like a game. There was a learning 
+learning curve, but I ended up enjoying it until it. I think the adcs 
+challenge part should have actually been extra credit not “challenge 
+credit” due to it not being covered in class material. Interesting 
+nonetheless.
 
 ------------------------------------------------------------------------
 Student 2: What is your assessment of the assignment? Was it helpful?
 Was it fun?
 
-
+Working with assembly for the first time was pretty fun. It was nice to
+know how the code is assembled. 
 
 ------------------------------------------------------------------------
 (optional) What information can you provide about your submission that
 will help your grader to grade it in the most favorable light? In
 particular, what bugs are in your submission?
-
-
+We attempted to optimize our code even further in part 2f. We 
+successfully optimized the assembly language code by using the assembly 
+language guarded loop pattern and placing the code for BigInt_larger 
+within the BigInt_add function. However, when trying to implement adcs 
+we came across an Addition overflow that we did not know how to solve,as
+it was the challenge portion and we could not recieve any help. We have 
+the implementation saved on another file just in case. 
 
 ------------------------------------------------------------------------
 What is your mywc program test plan?
@@ -131,24 +141,35 @@ characters,
 Boundary tests
 mywc1char.txt- Contains only 1 char so mywc.s and mywc.c will only count
  1 character with 1 word and 0 lines
+
 mywc1line.txt- Contains only 1 line so mywc.s and mywc.c will only count 
 1 line and no characters or words
+
 mywc1word.txt- Contains only 1 word so mywc.s and mywc.c will only count 
 1 word, the number of characters in that word and 0 lines
+
 mywclines.txt- Contains only lines so mywc.s and mywc.c will only count 
 the number of lines with no characters and no words
+
 mywcspace.txt- Contains only a space so mywc.s and mywc.c will only count 
 1 space character and no words or lines
 
 Statement tests
-mywcnumbers.txt
-mywcpoetry.txt
-mywcwordswithnum.txt
+mywcnumbers.txt: The file contains many numbers, a few lines, and some 
+words. The file contains 3 lines, 10 words, and 247 characters
+
+mywcpoetry.txt: Contains a poem by Edgar Alan Poe.It contains 21 lines,
+164 words, and 754 characters. In it are a mix of letters, words, and 
+some special characters.
+
+mywcwordswithnum.txt: Contains words with numbers. Tests to count the 
+different variety of lines, words,and characters.The file contains 2 
+lines, 14 words, 83 characters
 
 Stress tests
-mywcrandom.txt- 
-
-
+mywcrandom.txt- Contains most of the printable ASCII values. We check to
+see if all the characters are counted. The output should be 7 lines , 
+67 words, and 683 characters.
 
 ------------------------------------------------------------------------
 What are the CPU times consumed by the programs from Parts 2a, 2b, 2d,
@@ -162,10 +183,8 @@ Part 2d:  10.420000 seconds
 
 Part 2e:  3.850000 seconds
 
-Part 2f:  3.710000 seconds
+Part 2f:  3.700000 seconds
 
-
-3.800000
 
 
 
