@@ -128,6 +128,27 @@ We will vary all of tests to make sure it covers all the extremes, when
 there are no lines, when there are only all lines, when there are no 
 characters, 
 
+Boundary tests
+mywc1char.txt- Contains only 1 char so mywc.s and mywc.c will only count
+ 1 character with 1 word and 0 lines
+mywc1line.txt- Contains only 1 line so mywc.s and mywc.c will only count 
+1 line and no characters or words
+mywc1word.txt- Contains only 1 word so mywc.s and mywc.c will only count 
+1 word, the number of characters in that word and 0 lines
+mywclines.txt- Contains only lines so mywc.s and mywc.c will only count 
+the number of lines with no characters and no words
+mywcspace.txt- Contains only a space so mywc.s and mywc.c will only count 
+1 space character and no words or lines
+
+Statement tests
+mywcnumbers.txt
+mywcpoetry.txt
+mywcwordswithnum.txt
+
+Stress tests
+mywcrandom.txt- 
+
+
 
 ------------------------------------------------------------------------
 What are the CPU times consumed by the programs from Parts 2a, 2b, 2d,

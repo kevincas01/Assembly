@@ -149,7 +149,7 @@ end:
         // ulSum += oAddend1->aulDigits[lIndex];
         add x1,  OADDEND1, aulDigits
         ldr x2, [x1, LINDEX, lsl 3]
-        adcs ULSUM, ULSUM, x2
+        adcs ULSUM, ULSUM, x2 
 
         // ulSum += oAddend2->aulDigits[lIndex];
         add x1,  OADDEND2, aulDigits
